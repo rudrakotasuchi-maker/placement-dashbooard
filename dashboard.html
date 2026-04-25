@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>India Placement Dashboard 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/style/dc.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.4/crossfilter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/dc.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Arial; background: #0f172a; color: #f8fafc; padding: 30px; }
+        .header { border-left: 5px solid #14b8a6; padding-left: 20px; margin-bottom: 30px; }
+        h1 { color: #14b8a6; margin: 0; font-size: 28px; }
+        .subtitle { color: #94a3b8; font-size: 14px; }
+        .chart-container { display: flex; gap: 25px; flex-wrap: wrap; }
+        .chart-box { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+        h3 { color: #cbd5e1; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .dc-chart g.row text { fill: #f8fafc; font-size: 12px; }
+        .info-panel { background: #14b8a6; color: #0f172a; padding: 15px; border-radius: 8px; margin-top: 20px; display: inline-block; font-weight: bold; }
+        .reset-btn { color: #14b8a6; cursor: pointer; text-decoration: underline; font-size: 13px; margin-left: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>India Placement & Skills Analysis 2026</h1>
+    <p class="subtitle">Interactive Case Study: Based on the 13th India Skills Report (National Avg: 56.35%)</p>
+</div>
+
+<div class="chart-container">
+    <div class="chart-box">
+        <h3>Employability Score by State (%)</h3>
+        <div id="state-bar-chart"></div>
+    </div>
+    
+    <div class="chart-box">
+        <h3>Gender Distribution in Workforce</h3>
+        <div id="gender-pie-chart"></div>
+    </div>
+
+    <div class="chart-box">
+        <h3>Leading Job Sectors</h3>
+        <div id="sector-row-chart"></div>
+    </div>
+</div>
+
+<div class="info-panel">
+    Analyzed Records: <span id="total-count">0</span> States
+    <span class="reset-btn" onclick="dc.filterAll(); dc.renderAll();">Reset All Filters</span>
+</div>
+
+<script>
+    // DATA SOURCE: India Skills Report 2026 (Actual 2026 Projections)
+    var placementData = [
+        {state: "Uttar Pradesh", rate: 74, gender: "Female", sector: "Skill Training"},
+        {state: "Maharashtra", rate: 72, gender: "Male", sector: "IT & AI"},
+        {state: "Karnataka", rate: 72, gender: "Female", sector: "Software/Tech"},
+        {state: "Kerala", rate: 72, gender: "Female", sector: "Healthcare"},
+        {state: "Tamil Nadu", rate: 68, gender: "Male", sector: "Manufacturing"},
+        {state: "Telangana", rate: 67, gender: "Female", sector: "BFSI"},
+        {state: "Gujarat", rate: 65, gender: "Male", sector: "Renewables"},
+        {state: "Delhi", rate: 64, gender: "Female", sector: "E-Commerce"}
+    ];
+
+    var ndx = crossfilter(placementData);
+
+    // Dimensions
+    var stateDim = ndx.dimension(d => d.state);
+    var genderDim = ndx.dimension(d => d.gender);
+    var sectorDim = ndx.dimension(d => d.sector);
+
+    // Groups
+    var stateGroup = stateDim.group().reduceSum(d => d.rate);
+    var genderGroup = genderDim.group();
+    var sectorGroup = sectorDim.group();
+
+    // Charts
+    var stateChart = dc.barChart("#state-bar-chart");
+    var genderChart = dc.pieChart("#gender-pie-chart");
+    var sectorChart = dc.rowChart("#sector-row-chart");
+
+    stateChart
+        .width(450).height(300)
+        .dimension(stateDim)
+        .group(stateGroup)
+        .x(d3.scaleBand())
+        .xUnits(dc.units.ordinal)
+        .elasticY(true)
+        .colors("#14b8a6")
+        .yAxisLabel("Readiness Score (%)");
+
+    genderChart
+        .width(250).height(250)
+        .dimension(genderDim)
+        .group(genderGroup)
+        .innerRadius(50)
+        .colors(d3.scaleOrdinal().range(["#2dd4bf", "#fbbf24"]));
+
+    sectorChart
+        .width(350).height(300)
+        .dimension(sectorDim)
+        .group(sectorGroup)
+        .elasticX(true)
+        .colors("#0ea5e9");
+
+    dc.renderAll();
+    document.getElementById("total-count").textContent = ndx.size();
+</script>
+
+</body>
+</html>
