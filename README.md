@@ -22,8 +22,7 @@ India Skills Report 2026 (Sample dataset used for visualization)
 https://rudrakotasuchi-maker.github.io/placement-dashbooard/
 
 ## 📷 Screenshot
-![Dashboard Screenshot]
-(Screenshot%202026-06-06%20143242.png)
+![Dashboard Screenshot](india skills.jpeg)
 
 ## 📌 How to Run
 1. Download the project
