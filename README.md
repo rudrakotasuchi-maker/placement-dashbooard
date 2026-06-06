@@ -19,7 +19,7 @@ This project is an interactive data visualization dashboard that analyzes employ
 India Skills Report 2026 (Sample dataset used for visualization)
 
 ## 🌐 Live Demo
-(Add your GitHub Pages link here)
+(https://rudrakotasuchi-maker.github.io/placement-dashboard/)
 
 ## 📷 Screenshot
 (Add screenshot here later)
